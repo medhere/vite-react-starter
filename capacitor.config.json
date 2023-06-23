@@ -1,0 +1,8 @@
+{
+  "appId": "org.prediagnosis.pdsl.app",
+  "appName": "PDSL APP",
+  "webDir": "build",
+  "server": {
+    "androidScheme": "https"
+  }
+}
