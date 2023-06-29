@@ -4,11 +4,11 @@ import useAxios from 'axios-hooks'
 
 // export const REQUEST_URI = `https://${window.location.hostname}:4000/api`
 // export const REQUEST_URI = '/api'
-export const REQUEST_URI = ''
+export const REQUEST_URI = 'http://localhost:8006/api/'
 
 loadProgressBar()
 
-const XHRDebug = (setting = false) => {
+const XHRLog = (setting = false) => {
   if (setting === true) {
     axios.interceptors.request.use(
       (req) => {
@@ -27,7 +27,7 @@ const XHRDebug = (setting = false) => {
       (err) => { return Promise.reject(err) }
     );
   }
-  else{
+  else {
     axios.interceptors.request.use(
       (req) => { return req; }, (err) => { return Promise.reject(err) }
     );
@@ -39,8 +39,8 @@ const XHRDebug = (setting = false) => {
 
 }
 
-export const XHR = async (method, url, userdata = null, debugSetting = false) => {
-  XHRDebug(debugSetting)
+export const XHR = async (method, url, userdata = null, log = false) => {
+  XHRLog(log)
   const auth = localStorage.getItem('auth') || null;
   return await axios({
     url, method, timeout: 10000,
@@ -52,22 +52,44 @@ export const XHR = async (method, url, userdata = null, debugSetting = false) =>
 }
 
 
-export const useXHR = (method, url, userdata = null, debugSetting = false) =>{
-  XHRDebug(debugSetting)
+export const useXHR = (method, url, userdata = null, autoStart = false, log = false) => {
+  //method = get, post, put, patch, delete
+  //url = 'http://api'
+  //userdata = {}
+
+  XHRLog(log)
   const auth = localStorage.getItem('auth') || null;
 
   const [{ data, loading, error, response }, execute, manualCancel] = useAxios(
     {
-      url, method, timeout: 10000,
+      url, method, timeout: 20000,
       baseURL: REQUEST_URI,
       headers: { 'Authorization': auth ? `Bearer ${auth}` : undefined, },
       params: method === 'get' ? userdata : undefined,
       data: method !== 'get' ? userdata : undefined,
       withCredentials: true
     },
-    { manual: true, useCache: false, autoCancel: false, ssr: false }
+    { manual: !autoStart, useCache: false, autoCancel: false, ssr: false }
   )
 
-  return{ data, response, loading, error, start: execute, cancel: manualCancel }
-  //start({data: {}, params: {}})
+  const send = (data, ...args) => {
+    if (userdata !== null) data = { ...userdata, ...data }   //merge userdata and data from start() if there is
+    return execute({
+      params: method === 'get' ? data : undefined,
+      data: method !== 'get' ? data : undefined,
+      ...args
+    })
+  }
+
+  const err = error && {
+    msg: error?.message,
+    data: error?.response?.data
+  }
+  const statusCode = response?.status
+
+  return { loading, data, statusCode, err, send, cancel: manualCancel }
+  //err returns null or object
+  //send({},...).then().catch().finally()
+  //loading && 
+  //cancel()
 }

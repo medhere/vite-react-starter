@@ -1,6 +1,8 @@
-import { useEffect, Suspense } from "react";
-import { ScrollRestoration, useLocation } from "react-router-dom";
+import { useEffect, Suspense, useState } from "react";
+import { useLocation } from "react-router-dom";
 import { ErrorBoundary } from "react-error-boundary";
+import { IonLoading } from "@ionic/react";
+import axios from "axios";
 
 export default function Loadables({ children }) {
   return (
@@ -11,7 +13,7 @@ export default function Loadables({ children }) {
             <div className="text-center mx-auto mt-[20vh]">
               <p>Something went wrong:</p>
               <pre>{error.message}</pre>
-              <button className="btn" onClick={resetErrorBoundary}>
+              <button className="btn w-20" onClick={resetErrorBoundary}>
                 Try again
               </button>
             </div>
@@ -22,8 +24,8 @@ export default function Loadables({ children }) {
         }}
       >
         <Suspense fallback={<>ProgressBar</>}>
-          {/* <ScrollToTop /> */}
-          {/* <ScrollRestoration /> */}
+          <AxiousLoadingUI />
+          <ScrollToTop />
           {children}
         </Suspense>
       </ErrorBoundary>
@@ -38,4 +40,47 @@ function ScrollToTop() {
     window.scrollTo(0, 0);
   }, [pathname]);
   return null;
+}
+
+
+function AxiousLoadingUI({ children }) {
+  const [axiosState, setAxiosState] = useState(false)
+  const [loadingtext, setLoadingtext] = useState('Please Wait...')
+
+  axios.interceptors.request.use(
+    (req) => {
+      setAxiosState(true)
+      setLoadingtext('Please Wait...')
+      return req;
+    },
+    (err) => {
+      setAxiosState(false)
+      setLoadingtext('Please Wait...')
+      return Promise.reject(err)
+    }
+  );
+
+  axios.interceptors.response.use(
+    (res) => {
+      setAxiosState(false)
+      setLoadingtext('Please Wait...')
+      return res;
+    },
+    (err) => {
+      setAxiosState(false)
+      setLoadingtext('Server Error! Reload Page')
+      return Promise.reject(err)
+    }
+  );
+
+  return (
+    <IonLoading
+      spinner='lines-sharp'
+      // translucent={true}
+      isOpen={axiosState}
+      // onDidDismiss={() => setAxiosState(false)}
+      message={loadingtext}
+    // duration={10000}
+    />
+  )
 }

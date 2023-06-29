@@ -1,5 +1,35 @@
-import { useSignIn, useSignOut, useAuthUser, useAuthHeader, useIsAuthenticated, } from "react-auth-kit";
-import { useNavigate } from "react-router-dom";
+import { useSignIn, useSignOut, useAuthUser, useAuthHeader, useIsAuthenticated, RequireAuth, } from "react-auth-kit";
+import { Navigate, Outlet, useNavigate } from "react-router-dom";
+import { notify } from "./Notifications";
+
+export const Authenticate = ({acceptRoles}) => {
+  const authUser = useAuthUser();
+  const navigate = useNavigate()
+
+  const auth = <RequireAuth loginPath={"/signin"}><Outlet /></RequireAuth>
+
+  if(acceptRoles === undefined) return auth
+  if(acceptRoles !== undefined && acceptRoles.includes(authUser().role)) {
+    return auth
+  }
+  else {
+    notify('toast', 'error', 'Wrong Route')
+    return <Navigate to={'/signin'}/>  
+  }
+
+}
+{/* <Authenticate acceptRoles={['admin','user']} /> */}
+
+
+export const AllowRoles = ({acceptRoles, children}) => {
+  const authUser = useAuthUser();
+
+  const component = <>{children}</>
+
+  if(acceptRoles === undefined) return component
+  if(acceptRoles !== undefined && acceptRoles.includes(componentUser().role)) return auth
+
+}
 
 export const Signin = () => {
   const signIn = useSignIn();

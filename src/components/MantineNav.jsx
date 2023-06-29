@@ -96,7 +96,7 @@ function MainLink({ icon, color, text, subtext, to }) {
         </Group>
       </UnstyledButton>
     </Link>
-  )
+  );
 }
 
 

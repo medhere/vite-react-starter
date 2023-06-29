@@ -3,7 +3,7 @@ import Swal from 'sweetalert2';
 import 'sweetalert2/dist/sweetalert2.min.css';
 
 
-export function notify(message='', type='toast', variant=''){
+export function notify(type, variant, message){
     //notistack variant = warning, error, success, info, default
     //swal variant = warning, error, success, info, question
 

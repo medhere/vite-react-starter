@@ -1,7 +1,7 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './App';
-import { defineCustomElements } from '@ionic/pwa-elements/loader';
+import { defineCustomElements } from '../node_modules/@ionic/pwa-elements/loader';
 import * as serviceWorkerRegistration from './libs/serviceWorkerRegistration';
 import './index.css';
 import '@ionic/react/css/core.css';
