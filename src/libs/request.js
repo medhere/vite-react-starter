@@ -4,11 +4,18 @@ import useAxios from 'axios-hooks'
 
 // export const REQUEST_URI = `https://${window.location.hostname}:4000/api`
 // export const REQUEST_URI = '/api'
-export const REQUEST_URI = 'http://localhost:8006/api/'
+export const REQUEST_URI = import.meta.env.MODE === 'development' ? 'http://localhost:8006/api/' : 'https://api.hc.dailybreadserver.com/api'
 
 loadProgressBar()
 
 const XHRLog = (setting = false) => {
+
+  // const myInterceptor = axios.interceptors.request.use(function () {/*...*/});
+  // axios.interceptors.request.eject(myInterceptor);
+
+  // const requestInterceptor = 
+  // const responseInterceptor = 
+
   if (setting === true) {
     axios.interceptors.request.use(
       (req) => {

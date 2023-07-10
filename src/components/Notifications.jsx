@@ -17,7 +17,8 @@ export function notify(type, variant, message){
 
 export function Notifications(){
     return <SnackbarProvider 
-        maxSnack={3} 
+        maxSnack={3}
+        dense={true} 
         autoHideDuration={5000} 
         anchorOrigin={{ vertical: 'top', horizontal: 'center', }} 
         action={(snackbarId) => (

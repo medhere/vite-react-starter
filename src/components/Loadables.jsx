@@ -1,8 +1,9 @@
 import { useEffect, Suspense, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { ErrorBoundary } from "react-error-boundary";
 import { IonLoading } from "@ionic/react";
 import axios from "axios";
+import { useSignOut } from "react-auth-kit";
 
 export default function Loadables({ children }) {
   return (
@@ -46,6 +47,7 @@ function ScrollToTop() {
 function AxiousLoadingUI({ children }) {
   const [axiosState, setAxiosState] = useState(false)
   const [loadingtext, setLoadingtext] = useState('Please Wait...')
+  const signOut = useSignOut()
 
   axios.interceptors.request.use(
     (req) => {
@@ -63,12 +65,14 @@ function AxiousLoadingUI({ children }) {
   axios.interceptors.response.use(
     (res) => {
       setAxiosState(false)
-      setLoadingtext('Please Wait...')
+      setLoadingtext('Please Wait...')      
       return res;
     },
     (err) => {
       setAxiosState(false)
       setLoadingtext('Server Error! Reload Page')
+      if(err.response.status === 401) signOut()
+      
       return Promise.reject(err)
     }
   );
