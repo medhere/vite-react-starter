@@ -46,7 +46,7 @@ const XHRLog = (setting = false) => {
 
 }
 
-export const XHR = async (method, url, userdata = null, log = false) => {
+export const XHR = async (method, url, userdata = null, config = {}, log = false) => {
   XHRLog(log)
   const auth = localStorage.getItem('auth') || null;
   return await axios({
@@ -55,11 +55,13 @@ export const XHR = async (method, url, userdata = null, log = false) => {
     headers: { 'Authorization': auth ? `Bearer ${auth}` : undefined, },
     params: method === 'get' ? userdata : undefined,
     data: method !== 'get' ? userdata : undefined,
+    withCredentials: true,
+    ...config
   })
 }
 
 
-export const useXHR = (method, url, userdata = null, autoStart = false, log = false) => {
+export const useXHR = (method, url, userdata = null, autoStart = false, config = {}, log = false) => {
   //method = get, post, put, patch, delete
   //url = 'http://api'
   //userdata = {}
@@ -74,7 +76,8 @@ export const useXHR = (method, url, userdata = null, autoStart = false, log = fa
       headers: { 'Authorization': auth ? `Bearer ${auth}` : undefined, },
       params: method === 'get' ? userdata : undefined,
       data: method !== 'get' ? userdata : undefined,
-      withCredentials: true
+      withCredentials: true,
+      ...config
     },
     { manual: !autoStart, useCache: false, autoCancel: false, ssr: false }
   )
