@@ -4,7 +4,7 @@ import useAxios from 'axios-hooks'
 
 // export const REQUEST_URI = `https://${window.location.hostname}:4000/api`
 // export const REQUEST_URI = '/api'
-export const REQUEST_URI = import.meta.env.MODE === 'development' ? 'http://localhost:8006/api/' : 'https://api.hc.dailybreadserver.com/api'
+export const REQUEST_URI = import.meta.env.MODE === 'development' ? 'http://localhost:8000/api/' : 'https://server.com/api'
 
 loadProgressBar()
 
@@ -102,4 +102,22 @@ export const useXHR = (method, url, userdata = null, autoStart = false, config =
   //send({},...).then().catch().finally()
   //loading && 
   //cancel()
+}
+
+
+export const xhrDownload = (data, filename) => {
+  //add config {responseType: 'blob'}
+  
+  const href = window.URL.createObjectURL(data);
+  
+  const anchorElement = document.createElement('a');
+  
+  anchorElement.href = href;
+  anchorElement.download = filename;
+  
+  document.body.appendChild(anchorElement);
+  anchorElement.click();
+  
+  document.body.removeChild(anchorElement);
+  window.URL.revokeObjectURL(href);
 }

@@ -23,7 +23,9 @@ export const AllowRoles = ({acceptRoles, children}) => {
   const component = <>{children}</>
 
   if(acceptRoles === undefined) return component
-  if(acceptRoles !== undefined && acceptRoles.includes(componentUser()?.role)) return auth
+  if(acceptRoles !== undefined && acceptRoles.includes(authUser()?.role)) return component
+
+  return <></>
 
 }
 
