@@ -22,7 +22,7 @@ export function Notifications(){
         autoHideDuration={5000} 
         anchorOrigin={{ vertical: 'top', horizontal: 'center', }} 
         action={(snackbarId) => (
-            <button className='font-bold m-2' onClick={() => closeSnackbar(snackbarId)}>
+            <button className='m-2 font-bold' onClick={() => closeSnackbar(snackbarId)}>
               X
             </button>
         )}    

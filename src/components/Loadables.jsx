@@ -1,9 +1,10 @@
 import { useEffect, Suspense, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import { ErrorBoundary } from "react-error-boundary";
 import { IonLoading } from "@ionic/react";
 import axios from "axios";
-import { useSignOut } from "react-auth-kit";
+import useSignOut from "react-auth-kit/hooks/useSignOut";
+import { Notifications } from "./Notifications";
 
 export default function Loadables({ children }) {
   return (
@@ -14,7 +15,7 @@ export default function Loadables({ children }) {
             <div className="text-center mx-auto mt-[20vh]">
               <p>Something went wrong:</p>
               <pre>{error.message}</pre>
-              <button className="btn w-20" onClick={resetErrorBoundary}>
+              <button className="w-20 btn" onClick={resetErrorBoundary}>
                 Try again
               </button>
             </div>
@@ -26,7 +27,8 @@ export default function Loadables({ children }) {
       >
         <Suspense fallback={<>ProgressBar</>}>
           <AxiousLoadingUI />
-          <ScrollToTop />
+          <Notifications />
+          {/* <ScrollToTop /> */}
           {children}
         </Suspense>
       </ErrorBoundary>
@@ -35,13 +37,13 @@ export default function Loadables({ children }) {
 }
 
 
-function ScrollToTop() {
-  const { pathname } = useLocation();
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [pathname]);
-  return null;
-}
+// function ScrollToTop() {
+//   const { pathname } = useLocation();
+//   useEffect(() => {
+//     window.scrollTo(0, 0);
+//   }, [pathname]);
+//   return null;
+// }
 
 
 function AxiousLoadingUI({ children }) {

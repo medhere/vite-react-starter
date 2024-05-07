@@ -67,7 +67,7 @@ export const Pagination = () => {
         <tbody>
           {users?.data?.data && users?.data?.data.map((user, i) => (
             <tr key={i}>
-              <td>{users?.data?.from + i}</td>
+              <td>{i + 1}</td>
               <td>{user.name}</td>
             </tr>
           ))}

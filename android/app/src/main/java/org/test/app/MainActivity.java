@@ -1,4 +1,4 @@
-package org.prediagnosis.pdsl.app;
+package org.test.app;
 
 import com.getcapacitor.BridgeActivity;
 

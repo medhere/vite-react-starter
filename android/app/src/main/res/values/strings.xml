@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">PDSL APP</string>
-    <string name="title_activity_main">PDSL APP</string>
-    <string name="package_name">org.prediagnosis.pdsl.app</string>
-    <string name="custom_url_scheme">org.prediagnosis.pdsl.app</string>
+    <string name="app_name">APP</string>
+    <string name="title_activity_main">APP</string>
+    <string name="package_name">org.test.app</string>
+    <string name="custom_url_scheme">org.test.app</string>
 </resources>
