@@ -4,7 +4,7 @@ import useAxios from 'axios-hooks'
 
 // export const REQUEST_URI = `https://${window.location.hostname}:4000/api`
 // export const REQUEST_URI = '/api'
-export const REQUEST_URI = import.meta.env.MODE === 'development' ? 'http://localhost:8006/api/' : 'https://api.hc.dailybreadserver.com/api'
+export const REQUEST_URI = import.meta.env.MODE === 'development' ? 'https://localhost:8000' : 'https://inretia.com'
 
 loadProgressBar()
 
@@ -51,7 +51,7 @@ export const XHR = async (method, url, userdata = null, config = {}, log = false
   const auth = localStorage.getItem('auth') || null;
   return await axios({
     url, method, timeout: 10000,
-    baseURL: REQUEST_URI,
+    baseURL: REQUEST_URI+'/api',
     headers: { 'Authorization': auth ? `Bearer ${auth}` : undefined, },
     params: method === 'get' ? userdata : undefined,
     data: method !== 'get' ? userdata : undefined,
@@ -72,7 +72,7 @@ export const useXHR = (method, url, userdata = null, autoStart = false, config =
   const [{ data, loading, error, response }, execute, manualCancel] = useAxios(
     {
       url, method, timeout: 20000,
-      baseURL: REQUEST_URI,
+      baseURL: REQUEST_URI+'/api',
       headers: { 'Authorization': auth ? `Bearer ${auth}` : undefined, },
       params: method === 'get' ? userdata : undefined,
       data: method !== 'get' ? userdata : undefined,
