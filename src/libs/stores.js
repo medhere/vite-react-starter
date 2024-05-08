@@ -1,10 +1,30 @@
 import { create } from 'zustand'
+import { persist, createJSONStorage } from 'zustand/middleware'
 
-const useAppStore = create((set, get) => ({
-    userdata: {},
-    set: (data) => set((state) => ({ userdata: {...state.userdata, ...data} })),
-    clear: () => set({ userdata: 0 }),
-}))
+export const useAppStore = create(
+    persist(
+        (set, get) => ({
+            userdata: {},
+            set: (data) => set((state) => ({ userdata: { ...state.userdata, ...data } })),
+            clear: () => set({ userdata: 0 }),
+        }),{
+            name: 'appstore',
+            storage: createJSONStorage(() => localStorage),
+            onRehydrateStorage: (state) => {
+                console.log('hydration starts')
+        
+                return (state, error) => {
+                  if (error) {
+                    console.log('an error happened during hydration', error)
+                  } else {
+                    console.log('hydration finished')
+                  }
+                }
+              },
+        }
+    )
+)
+
 
 
 
@@ -68,7 +88,7 @@ const useAppStore = create((set, get) => ({
 //   lush: { forest: { contains: { a: 'bear' } } },
 //   clearForest: () =>
 //     set(
-//       produce((state) => {
+    //       produce((state) => {
 //         state.lush.forest.contains = null
 //       }),
 //     ),
@@ -76,3 +96,6 @@ const useAppStore = create((set, get) => ({
 
 // const clearForest = useLushStore((state) => state.clearForest)
 // clearForest()
+
+//clear persist
+// useAppStore.persist.clearStorage()
